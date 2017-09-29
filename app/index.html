@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <title>双十一聚财节</title>
+  <meta name="format-detection" content="telephone=no">
+  <!-- safari full screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta id="apple-mobile-web-app-title" name="apple-mobile-web-app-title" content="诺诺镑客">
+  <!--build:css css/index.min.css-->
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <!--endbuild-->
+  <script>
+  //声明_czc对象:
+  var _czc = _czc || [];
+  //绑定siteid，请用您的siteid替换下方"XXXXXXXX"部分
+  _czc.push(["_setAccount", "1260689205"]);
+  </script>
+</head>
+
+<body id="app" class="box-vertical" v-cloak>
+  <div id="topBanner" class="relative">
+    <div class="ani">
+      <div class="fly-box" v-if="!activity.end">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="fire text-center" v-if="activity.end">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div id="jumpCoin">
+        <span class="coin left"></span>
+        <span class="coin middle"></span>
+        <span class="coin right"></span>
+      </div>
+      <div class="city"></div>
+      <div class="tree">
+        <div class="left">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="right">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <div class="ani-bottom"><img src="images/red_circle.png" height="40px;" width="100%"></div>
+  </div>
+
+  <div class="logo " v-bind:class="{'end':activity.end}"></div>
+  <div class="ac-time text-center">
+    <span>活动时间：</span>
+    <span class="time" v-for="time in activity.time">{{time}}</span> 
+  </div>
+  <div class="main">
+    <div id="part1" class="margin-top">
+      <div class="text-center"><img src="images/part1_title.png" width="125"></div>
+      <div class="product" v-for="product in pageData.dianFengJuHuiInfo" track-by="$index" v-on:click="goProductDetail($index, 1)">
+        <div class="left">
+          <p class="title">{{product.title}}</p>
+          <div class="rate">{{product.annual_rate}}</div>
+        </div>
+        <div class="right">
+          <p class="small yellow tip text-center">每满 100w</p>
+          <p class="small red">加息<span>0.5</span><span class="font-23">%</span></p>
+        </div>
+        <div class="progress">
+          <div class="inner" style="width:{{product.percent}}%"></div>
+        </div>
+      </div>
+      <p class="margin-top rule-link" v-on:click="showRuleMask('part1')">巅峰钜惠活动规则&nbsp;&gt;&gt;</p>
+    </div>
+    <div v-if="!activity.end">
+      
+    
+    <div id="part2" class="dbl-margin-top">
+      <div class="text-center"><img src="images/part2_title.png" width="195"></div>
+      <div class="product" v-for="product in pageData.stagePlanHuiJuInfo" track-by="$index" v-on:click="goProductDetail($index, 6)">
+        <div class="left">
+          <p class="title">{{product.title}}</p>
+          <div class="rate">{{product.annual_rate}}<span class="small">起</span></div>
+        </div>
+        <div class="right">
+          <p class="small yellow tip text-center">收益逐月</p>
+          <p class="small red">递增<span>0.3</span><span class="font-23">%</span></p>
+        </div>
+        <div class="progress">
+          <div class="inner" style="width:{{product.percent}}%"></div>
+        </div>
+      </div>
+    </div>
+    <div id="part3" class="dbl-margin-top">
+      <div class="text-center margin-bottom"><img src="images/part3_title.png" width="201"></div>
+      <div class="tab-container">
+        <div class="tab-item-box row text-center row-no-padding">
+          <div class="item col col-33" :class="{'active': tab.active}" v-for="tab in tabItems" v-on:click="selectTab($index)">{{tab.text}}</div>
+        </div>
+        <div class="tab-content">
+          <ul class="title row text-center ">
+            <li class="col col-15">排名</li>
+            <li class="col col-25">手机号</li>
+            <li class="col col-25">年化投资额</li>
+            <li class="col col-40">奖品</li>
+          </ul>
+          <div id="winnerList">
+            <img src="images/default.png" v-if="!winnerList.length" style="width: 100%;height: 100%;">
+            <ul class="title row text-center " v-for="item in winnerList" track-by="index">
+              <li class="col col-15">{{$index+1}}</li>
+              <li class="col col-25">{{item.mobile_num}}</li>
+              <li class="col col-25">{{item.annual_invest_money | currency ''}} </li>
+              <li class="col col-40">{{item.prize}}</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+      <p class="margin-top rule-link" v-on:click="showRuleMask('part3')">聚豪榜活动规则&nbsp;&gt;&gt;</p>
+      <p class="rule-link no-underline" v-if="pageData.is_login">我今日当前年化投资额：<span>{{pageData.annual_invest_money | currency ''}}</span>元</p>
+      <div v-if="!pageData.is_login" id="btnView" v-on:click="goLogin()">查看当前年化投资额</div>
+    </div>
+    <div id="part4" class="dbl-margin-top">
+      <div class="text-center margin-bottom"><img src="images/part4_title.png" width="172"></div>
+      <div class="relative">
+        <img src="images/part4_pic.jpg" class="full-width">
+        <div class="btn">
+          <span v-on:click="goPage('specInvest')"></span>
+          <span v-on:click="goPage('mall')"></span>
+          <span v-on:click="goPage('activity')"></span>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div id="rightBar" v-if="!activity.end">
+    <div id="btnAcRule" v-on:click="showRuleMask('double11')"></div>
+    <div class="icon icon1"></div>
+    <div class="icon icon2"></div>
+    <div class="icon icon3"></div>
+    <div id="progress">
+      <div class="inner" style="height:{{Math.ceil(activity.depositMoney/100000000*100)}}%">
+         <i class="icon-light"></i>
+      </div>
+
+    </div>
+  </div>
+  <div id="loading" class="row row-center" v-show="showLoading">
+    <div class="inner">
+      <img src="images/loading.gif">
+    </div>
+  </div>
+  <div id="rule" v-show="showRule" @click="hideRuleMask">
+    <div class="content margin-top">
+      <div class="text-center dbl-margin-bottom"><img src="images/rule_title.png" width="98"></div>
+      <p v-for="item in curRule" class="margin-bottom">{{item}}</p>
+      <i class="icon-close"></i>
+    </div>
+  </div>
+  <!--build:js js/vendor.min.js -->
+  <script src="js/zepto.js"></script>
+  <script src="js/vue.js"></script>
+  <script src="js/bridge.js"></script>
+  <script src="js/util.js"></script>
+  <!--endbuild-->
+  <!--build:js js/main.min.js-->
+  <script src="js/index.js"></script>
+  <!--endbuild-->
+
+  <script>
+  var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+  document.write(unescape("%3Cspan style='display:none' id='cnzz_stat_icon_1260689205'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1260689205' %3E%3C/script%3E"));
+  </script>
+</body>
+
+</html>
